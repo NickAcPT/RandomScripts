@@ -128,7 +128,7 @@ fun readOriginalMapping(version: String): MemoryMappingTree {
     return readMappingFromFile(File("""L:\LightCraftMappings\$version\mappings-official-srg-named.tiny2"""))
 }
 
-private fun readMappingFromFile(file: File): MemoryMappingTree {
+fun readMappingFromFile(file: File): MemoryMappingTree {
     val mappingTree = MemoryMappingTree()
     return file.reader().use {
         MappingReader.read(it, MappingReader.detectFormat(file.toPath()), mappingTree)
