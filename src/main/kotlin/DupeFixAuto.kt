@@ -18,8 +18,7 @@ fun main() {
     val mappingTree = tree as MappingTree
     val clonedClasses = mappingTree.classes.toList()
 
-    val unfixableClones = setOf(
-        "updateScreen",
+    val unfixableClones = setOf("updateScreen",
         "updateEntities",
         "unloadQueuedChunks",
         "initGui",
@@ -32,9 +31,7 @@ fun main() {
         "tick",
         "onLivingUpdate",
         "dropEquipment",
-
         /* Misc */
-
         "getTabIconItemIndex",
         "renderAsNormalBlock",
         "func_96092_aw",
