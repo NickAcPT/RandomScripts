@@ -7,28 +7,30 @@ import net.fabricmc.mappingio.tree.MemoryMappingTree
 import java.io.File
 
 fun main() {
-    arrayOf("1.5.2", "1.6.4", "1.7.10", "1.8.9").forEach { version ->
-        val inputFile = File("""L:\LightCraftMappings\$version\mappings-official-srg-named.tiny2""")
-        val tree: MappingTree = MemoryMappingTree()
-        MappingReader.read(inputFile.toPath(), tree as MappingVisitor)
-        tree.classes.forEach { clazz ->
-            clazz.methods.forEach sus@{ method ->
-                val comment = method.comment ?: return@sus
-                if (comment.isEmpty() || comment.isBlank()) {
-                    method.comment = null
+    arrayOf("1.8.9").forEach { version ->
+        arrayOf("mappings-official-srg-named.tiny2", "mappings-official-named.tiny2").forEach { mappingFileName ->
+            val inputFile = File("""L:\LightCraftMappings\$version\$mappingFileName""")
+            val tree: MappingTree = MemoryMappingTree()
+            MappingReader.read(inputFile.toPath(), tree as MappingVisitor)
+            tree.classes.forEach { clazz ->
+                clazz.methods.forEach sus@{ method ->
+                    val comment = method.comment ?: return@sus
+                    if (comment.isEmpty() || comment.isBlank()) {
+                        method.comment = null
+                    }
+                }
+                clazz.fields.forEach sus@{ f ->
+                    val comment = f.comment ?: return@sus
+                    if (comment.isEmpty() || comment.isBlank()) {
+                        f.comment = null
+                    }
                 }
             }
-            clazz.fields.forEach sus@{ f ->
-                val comment = f.comment ?: return@sus
-                if (comment.isEmpty() || comment.isBlank()) {
-                    f.comment = null
-                }
+
+            MappingWriter.create(inputFile.toPath(), MappingFormat.TINY_2).use {
+                tree.accept(it)
             }
-        }
 
-        MappingWriter.create(inputFile.toPath(), MappingFormat.TINY_2).use {
-            tree.accept(it)
         }
-
     }
 }
